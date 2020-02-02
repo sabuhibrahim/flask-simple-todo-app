@@ -118,17 +118,13 @@ def addTodo():
             user_id=current_user.id,
             title=form.title.data, 
             description=form.description.data,
-            complete=True,
+            complete=False,
             )
         db.session.add(new_todo)
         db.session.commit()
         return jsonify(data={'message': 'OK'})
     return jsonify(data=form.errors)
-# @app.route('/static/css/<filename>')
-# url_for('static', filename='css/'+filename)
 
-# @app.route('/static/js/<filename>')
-# url_for('static', filename='js/'+filename)
 
 if __name__ == "__main__":
     db.create_all()
