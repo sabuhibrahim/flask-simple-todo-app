@@ -122,8 +122,16 @@ def addTodo():
             )
         db.session.add(new_todo)
         db.session.commit()
-        return jsonify(data={'message': 'OK'})
-    return jsonify(data=form.errors)
+        return jsonify({
+            'message': 'OK',
+            'id': new_todo.id,
+            'title': new_todo.title,
+            'description': new_todo.description,
+            })
+    return jsonify({
+        'message' : 'BAD',
+        'errors' : form.errors,
+        })
 
 
 if __name__ == "__main__":

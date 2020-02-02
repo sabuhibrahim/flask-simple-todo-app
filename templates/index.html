@@ -1,5 +1,6 @@
 
 {% extends "layout.html" %}
+{% block pagetitle %}Index{% endblock pagetitle %}
 {% block navbar %}
 
 {% include "includes/navbar.html" %}
@@ -65,11 +66,14 @@
 	const form = document.querySelector('#form');
 	const submit = document.querySelector('#submit');
 	const request = new Request();
+	const todo = new Todos();
 
 	submit.onclick = (e) => {
 		request.post('/add',new FormData(form),{
 			'X-CSRFToken': '{{ form.csrf_token._value() }}',
-		}).then(data=>console.log(data));
+		}).then(data=>{
+			todo.addTodo(data);
+		});
 		e.preventDefault();
 	};
 	
