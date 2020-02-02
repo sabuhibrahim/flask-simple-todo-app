@@ -1,0 +1,72 @@
+
+{% extends "layout.html" %}
+{% block navbar %}
+
+{% include "includes/navbar.html" %}
+	
+{% endblock navbar %}
+
+{% block body %}
+
+	<div class="container" style="margin-top: 80px;">
+		<div class="card-row col-md-8 ml-auto mr-auto">
+			<div class="card-header">To Do List</div>
+			<div class="card-body">
+				<form id="form">
+					{{ form.hidden_tag() }}
+					<div class="form-group">
+						{{form.title.label}}
+						{{form.title(class_='form-control', placeholder='Todo title')}}
+					</div>
+
+					<div class="form-group">
+						{{form.description.label}}
+						{{form.description(class_='form-control', placeholder='Todo description', row=4)}}
+					</div>
+				</form>
+				<button class="btn btn-primary float-right" id="submit">Add ToDo</button>
+				<br>
+			</div>
+			<div class="card-body">
+				<hr>
+				<h5 class="card-title" id="tasks-title">ToDo's</h5>
+				
+				<div class="form-group">
+					{{form.search.label}}
+					{{form.search(class_='form-control', placeholder='Search Todo')}}
+				</div>
+				<ul class="list-group">
+					{% if todos %}
+					   {% for todo in todos %}
+							<li class="list-group-item d-flex justify-content-between">
+								<b>{{todo.title}}</b>: {{todo.description}}
+								<a href="#" class="delete-item">
+									<i class="fa fa-remove"></i>
+								</a>
+							</li>
+					   {% endfor %}
+					{% else %}
+					<div class="alert alert-warning">You have not any todo yet</div>
+					{% endif %}
+				</ul>
+				<br>
+				<a href="#" id="clear-todos" class="btn btn-dark float-right">Clear All ToDo's</a>
+			</div>
+		</div>
+	</div>
+{% endblock body %}
+{% block myscript %}
+<script type="text/javascript">
+	const form = document.querySelector('#form');
+	const submit = document.querySelector('#submit');
+	const request = new Request();
+
+	submit.onclick = (e) => {
+		request.post('/add',new FormData(form),{
+			'X-CSRFToken': '{{ form.csrf_token._value() }}',
+		}).then(data=>console.log(data));
+		e.preventDefault();
+	};
+	
+</script>
+{% endblock myscript %}

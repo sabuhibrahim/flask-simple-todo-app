@@ -1,0 +1,38 @@
+
+{% extends "layout.html" %}
+{% block pagetitle %}Login{% endblock pagetitle %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Login</h5>
+                    {% block messages %}
+                        {% include "includes/error.html" %}
+                    {% endblock messages %}
+                    <form class="form-signin" action="/login" method="post">
+                        {{ form.hidden_tag() }}
+                        <div class="form-label-group">
+                            {{render_field(form.username, class='form-control', placeholder='Username or Email')}}
+                        </div>
+                        <div class="form-label-group">
+                            {{render_field(form.password,class='form-control', placeholder='Password')}}
+                        </div>
+                        <div class="custom-control custom-checkbox mb-3">
+                            {{form.remember(class_='custom-control-input')}}
+                            {{form.remember.label(class_='custom-control-label') }}
+                        </div>
+                
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Login</button>
+                        <hr class="my-4">
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <h6 style="text-align:center">Və ya <a href="/register">Qeydiyyatdan</a> keçin</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
