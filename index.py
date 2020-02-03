@@ -12,7 +12,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 
 from sqlalchemy.sql import func
 
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 
 from sqlalchemy.orm import relationship
 
@@ -133,6 +133,56 @@ def addTodo():
         'errors' : form.errors,
         })
 
+@app.route('/update/<int:todo_id>')
+@login_required
+def update(todo_id):
+    todo = Todolist.query.filter_by(id=todo_id).first()
+    if todo.user_id == current_user.id:
+        db.session.query(Todolist).filter_by(id=todo_id).update({'complete': 1})
+        db.session.commit()
+        return jsonify({'message': 'OK'})
+    return jsonify({'message': 'BAD'})
+
+@app.route('/delete/<int:todo_id>')
+@login_required
+def delete(todo_id):
+    todo = Todolist.query.filter_by(id=todo_id).first()
+    if todo.user_id == current_user.id:
+        db.session.delete(todo)
+        db.session.commit()
+        return jsonify({'message': 'OK'})
+    return jsonify({'message': 'BAD'})
+
+@app.route('/search/<string:text>')
+@login_required
+def search(text):
+    user_todos = Todolist.query.filter(and_( Todolist.user_id == current_user.id,
+        or_(Todolist.title.like('%'+text+'%'),
+            Todolist.description.like('%'+text+'%')),
+        ))
+    todos = []
+    for todo in user_todos:
+        todos.append({
+            'id' : todo.id,
+            'title' : todo.title,
+            'description' : todo.description,
+            'complete' : todo.complete,
+            })
+    return jsonify(todos)
+
+@app.route('/search/')
+@login_required
+def searchAll():
+    user_todos = Todolist.query.filter(Todolist.user_id == current_user.id)
+    todos = []
+    for todo in user_todos:
+        todos.append({
+            'id' : todo.id,
+            'title' : todo.title,
+            'description' : todo.description,
+            'complete' : todo.complete,
+            })
+    return jsonify(todos)
 
 if __name__ == "__main__":
     db.create_all()
