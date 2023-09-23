@@ -1,16 +1,20 @@
-# flask_login_register_todo
+# Flask simple todo app
 
-#Required:
-```
-   pip install Flask-WTF
-   pip install flask-login
-   pip install sqlalchemy
-   pip install flask_bcrypt
+## Intallation:
+
+### Create environment and activate
+```bash
+python -m venv venv
+source venv/bin/activate
 ```
 
-#Then:
+### Install requirements.txt:
    
-   in command run
-   ```
-     py index.py
+```bash
+pip install -r requirements.txt
+```
+
+### Run app
+```bash
+python index.py
 ```
